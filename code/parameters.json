@@ -56,9 +56,19 @@
     "Ocean Density": 1028,
     "Ice Density": 900,
     "Land Thermal Scale Depth": 1.0,
-    "Ocean Thermal Scale Depth": 0.1,
+    "Ocean Thermal Scale Depth": 70.0,
     "Ice Thermal Scale Depth": 1.0,
     "Land Specific Heat Capacity": 790,
     "Ocean Specific Heat Capacity": 4187,
-    "Ice Specific Heat Capacity": 2060
+    "Ice Specific Heat Capacity": 2060,
+    "L12": 2.0015e7,
+    "L23": 3.4667e7,
+    "L34": 4.0030e7,
+    "L45": 3.4667e7,
+    "L56": 2.0015e7,
+    "k12": 1e7,
+    "k23": 1e7,
+    "k34": 1e7,
+    "k45": 5e7,
+    "k56": 1e7
 }
