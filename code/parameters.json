@@ -1,0 +1,64 @@
+{
+    "Zone": {
+        "1": {
+            "Geometric Factor": 1.076,
+            "Area Fraction": 0.067,
+            "Land Fraction": 0.0,
+            "Ocean Fraction": 0.550925926,
+            "Ice Fraction": 0.449074074
+        },
+        "2": {
+            "Geometric Factor": 0.2277,
+            "Area Fraction": 0.183,
+            "Land Fraction": 0.074074074,
+            "Ocean Fraction": 0.925925926,
+            "Ice Fraction": 0.0
+        },
+        "3": {
+            "Geometric Factor": 0.3045,
+            "Area Fraction": 0.25,
+            "Land Fraction": 0.240740741,
+            "Ocean Fraction": 0.759259259,
+            "Ice Fraction": 0.0
+        },
+        "4": {
+            "Geometric Factor": 0.3045,
+            "Area Fraction": 0.25,
+            "Land Fraction": 0.310185185,
+            "Ocean Fraction": 0.689814815,
+            "Ice Fraction": 0.0
+        },
+        "5": {
+            "Geometric Factor": 0.2277,
+            "Area Fraction": 0.183,
+            "Land Fraction": 0.694444444,
+            "Ocean Fraction": 0.305555556,
+            "Ice Fraction": 0.0
+        },
+        "6": {
+            "Geometric Factor": 0.1076,
+            "Area Fraction": 0.067,
+            "Land Fraction": 0.277777778,
+            "Ocean Fraction": 0.652777778,
+            "Ice Fraction": 0.069444444
+        }
+    },
+    "Stefan-Boltzmann Constant": 5.6696e-8,
+    "Solar Constant": 1368,
+    "Earth Radius": 6371e3,
+    "Earth Total Emissivity": 1,
+    "Atmospheric Transmissivity": 0.63,
+    "Atmospheric Albedo": 0.2,
+    "Land Albedo": 0.4,
+    "Ocean Albedo": 0.1,
+    "Ice Albedo": 0.6,
+    "Land Density": 2500,
+    "Ocean Density": 1028,
+    "Ice Density": 900,
+    "Land Thermal Scale Depth": 1.0,
+    "Ocean Thermal Scale Depth": 0.1,
+    "Ice Thermal Scale Depth": 1.0,
+    "Land Specific Heat Capacity": 790,
+    "Ocean Specific Heat Capacity": 4187,
+    "Ice Specific Heat Capacity": 2060
+}
