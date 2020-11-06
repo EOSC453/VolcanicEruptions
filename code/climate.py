@@ -1,6 +1,7 @@
 import json
 import numpy as np
 
+
 class EarthModel():
     """A box model to investigate the effects of volcanism of Earth's energy
     balance
@@ -67,39 +68,46 @@ class EarthModel():
         )
 
         # Zone boundary properties
-        L12 = params["L12"]
-        L23 = params["L23"]
-        L34 = params["L34"]
-        L45 = params["L45"]
-        L56 = params["L56"]
-        k12 = params["k12"]
-        k23 = params["k23"]
-        k34 = params["k34"]
-        k45 = params["k45"]
-        k56 = params["k56"]
-        # Build off diagonal components first
-        self.boundary_length = np.array([
-            [0, L12, 0, 0, 0, 0],
-            [L12, 0, L23, 0, 0, 0],
-            [0, L23, 0, L34, 0, 0],
-            [0, 0, L34, 0, L45, 0],
-            [0, 0, 0, L45, 0, L56],
-            [0, 0, 0, 0, L56, 0],
+        self.L12 = params["L12"]
+        self.L23 = params["L23"]
+        self.L34 = params["L34"]
+        self.L45 = params["L45"]
+        self.L56 = params["L56"]
+        self.k12 = params["k12"]
+        self.k23 = params["k23"]
+        self.k34 = params["k34"]
+        self.k45 = params["k45"]
+        self.k56 = params["k56"]
+        
+    @property
+    def boundary_length(self):
+        return np.array([
+            [0, self.L12, 0, 0, 0, 0],
+            [self.L12, 0, self.L23, 0, 0, 0],
+            [0, self.L23, 0, self.L34, 0, 0],
+            [0, 0, self.L34, 0, self.L45, 0],
+            [0, 0, 0, self.L45, 0, self.L56],
+            [0, 0, 0, 0, self.L56, 0],
         ])
-        self.boundary_conductivity = np.array([
-            [0, k12, 0, 0, 0, 0],
-            [k12, 0, k23, 0, 0, 0],
-            [0, k23, 0, k34, 0, 0],
-            [0, 0, k34, 0, k45, 0],
-            [0, 0, 0, k45, 0, k56],
-            [0, 0, 0, 0, k56, 0],
+
+    @property
+    def boundary_conductivity(self):
+        return np.array([
+            [0, self.k12, 0, 0, 0, 0],
+            [self.k12, 0, self.k23, 0, 0, 0],
+            [0, self.k23, 0, self.k34, 0, 0],
+            [0, 0, self.k34, 0, self.k45, 0],
+            [0, 0, 0, self.k45, 0, self.k56],
+            [0, 0, 0, 0, self.k56, 0],
         ])
-        self.boundary_coefficients = (
-            self.boundary_length * self.boundary_conductivity
-        )
-        # Add the diagonal
-        diag = -1 * self.boundary_coefficients.sum(axis=0)
-        np.fill_diagonal(self.boundary_coefficients, diag)
+
+    @property
+    def boundary_matrix(self):
+        K = self.boundary_length * self.boundary_conductivity
+        # Add diagonal term
+        diag = -1 * K.sum(axis=0)
+        np.fill_diagonal(K, diag)
+        return K
 
     @property
     def flux_out(self):
@@ -116,8 +124,10 @@ class EarthModel():
         )
 
     def flux_balance(self, T):
-        flux_zone = np.matmul(self.boundary_coefficients, T) / self.zone_area
-        return (self.flux_in - self.flux_out * T**4 + flux_zone) / self.zone_beta
+        flux_in = self.flux_in
+        flux_out = self.flux_out * T**4
+        flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
+        return (flux_in - flux_out + flux_zone) / self.zone_beta
 
     def _read_zone_param(self, param, params):
         n = self.size
