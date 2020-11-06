@@ -1,5 +1,98 @@
 import json
 import numpy as np
+import scipy.integrate
+
+
+class Ode(scipy.integrate.ode):
+    """ An interface for ode integration.
+    
+    This is specialized from scipy.integrate.ode to handle the rk4 and euler
+    integration methods developed in EOSC 453.
+    
+    Args:
+        *args: Arguments to pass scipy.integrate.ode
+        **kwargs: Keyword arguments to pass scipy.integrate.ode
+        
+    """
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+    def set_integrator(self, name, **integrator_params):
+        """Define the ode integrator.
+        
+        Use a special case for the ubc_rk4 and ubc_euler integrators
+        developed in EOSC 453. Otherwise, use the standard scipy
+        integrators.
+        
+        Args:
+            name: The name of the integrator to use. This can be any
+                integrator supported by scipy.integrate.ode or
+                'ubc_rk4' or 'ubc_euler'.
+            **integrator_params: Integrator params to pass to
+            scipy.integrate.ode
+            
+        """
+        if name == 'ubc_rk4':
+            self._ubc_integrator = name
+            self.integrate = self._ubc_rk4
+        elif name == 'ubc_euler':
+            self._ubc_integrator = name
+            self.integrate = self._ubc_euler
+        else:
+            super().set_integrator(name, **integrator_params)
+    
+    def solve(self, n, tf):
+        """Solve the ode system.
+        
+        Args:
+            n (int): The number of time steps.
+            tf (number): The stop time.
+            
+        Returns:
+            t (array(number)): An (n+1)-dimensional array containing the time
+            steps and initial time.
+            Y (array(number)): An (m, n+1)-dimensional array containing the
+            solution. m is the number of variables, n is the number of time 
+            steps.
+                
+        """
+        Y = np.zeros((n + 1, self.y.size))
+        t = np.zeros(n + 1)
+        # Initial conditions
+        Y[0, :] = self.y
+        t[0] = self.t
+        h = (tf - self.t) / n
+        for i in range(n):
+            y = self.integrate(self.t + h)
+            Y[i + 1, :] = y
+            t[i + 1] = self.t
+        return t, Y
+            
+    def _ubc_rk4(self, t1):
+        # An implementation of RK4 based on Assignment 0 of EOSC 453
+        t0 = self.t # Start time
+        y0 = self.y # Start value
+        h = t1 - t0 # Step size
+        k1 = h * self.f(t0, y0)
+        k2 = h * self.f(t0 + h / 2, y0 + k1 / 2)
+        k3 = h * self.f(t0 + h / 2, y0 + k2 / 2)
+        k4 = h * self.f(t0 + h, y0 + k3)
+        dy = (k1 + 2 * k2 +  2 * k3 + k4) / 6
+        y1 = y0 + dy
+        self.set_initial_value(y1, t1)
+        return y1
+    
+    def _ubc_euler(self, t1):
+        # An implementation of the Euler method based on Assignment 0 of
+        # EOSC 453
+        t0 = self.t # Start time
+        y0 = self.y # Start value
+        h = t1 - t0 # Step size
+        dy = h * self.f(t0, y0)
+        y1 = y0 + dy
+        self.set_initial_value(y1, t1)
+        return y1
 
 
 class EarthModel():
@@ -78,6 +171,14 @@ class EarthModel():
         self.k34 = params["k34"]
         self.k45 = params["k45"]
         self.k56 = params["k56"]
+
+        # Integrator parameters
+        self.t0 = None # Initial time
+        self.tf = None # Final time
+        self.tn = None # Number of time steps
+        self.T0 = None # Initial value
+        self.method = 'ubc_rk4' # Integrator method
+        self.ode = None
         
     @property
     def boundary_length(self):
@@ -128,6 +229,15 @@ class EarthModel():
         flux_out = self.flux_out * T**4
         flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
         return (flux_in - flux_out + flux_zone) / self.zone_beta
+    
+    def build_ode(self, f):
+        self.ode = Ode(f)
+        self.ode.set_initial_value(self.T0, self.t0)
+
+    def solve(self):
+        t, T = self.ode.solve(self.tn, self.tf)
+        self.t = t
+        self.T = T
 
     def _read_zone_param(self, param, params):
         n = self.size
