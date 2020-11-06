@@ -101,23 +101,23 @@ class EarthModel():
         diag = -1 * self.boundary_coefficients.sum(axis=0)
         np.fill_diagonal(self.boundary_coefficients, diag)
 
-    def outbound_flux(self):
+    @property
+    def flux_out(self):
         return (
             self.earth_emissivity * self.sky_transmissivity *
             self.stefan_boltzmann
         )
 
-    def inbound_flux(self):
+    @property
+    def flux_in(self):
         return (
             self.zone_gamma * self.solar_constant *
             (1 - self.sky_albedo) * (1 - self.zone_albedo)
         )
 
-    def vector_field(self, T):
-        flux_in = self.inbound_flux()
-        flux_out = self.outbound_flux() * T**4
+    def flux_balance(self, T):
         flux_zone = np.matmul(self.boundary_coefficients, T) / self.zone_area
-        return (flux_in - flux_out + flux_zone) / self.zone_beta
+        return (self.flux_in - self.flux_out * T**4 + flux_zone) / self.zone_beta
 
     def _read_zone_param(self, param, params):
         n = self.size
