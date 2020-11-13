@@ -1,0 +1,186 @@
+\documentclass{article}
+
+% If you're new to LaTeX, here's some short tutorials:
+% https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes
+% https://en.wikibooks.org/wiki/LaTeX/Basics
+
+% Formatting
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage[titletoc,title]{appendix}
+\usepackage[section]{placeins}  % allows us to stop floaters
+\usepackage{longtable}  % may be useful for bringing in our data tables to the appendix
+\usepackage{minted} % pretty
+\usemintedstyle{borland}
+\usepackage{amsmath,amsfonts,amssymb,mathtools}
+\usepackage{graphicx,float}
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{algorithmic}
+
+\usepackage[backend=biber,style=authoryear]{biblatex}
+\addbibresource{references.bib}
+
+\setlength{\parindent}{3em}
+\usepackage{indentfirst}
+
+\title{EOSC 453 Assignment 2\\
+\large Volcanic Eruptions and Climate Change}
+\author{E. Giroud-Proeschel - 123456789 \\
+P. Matlashewski - 987654321\\
+M. Ormerod - 16265167
+}
+\date{November 20, 2020}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+% Introduction and Overview
+\section{Introduction}
+Anthropogenic global warming is a metric used to identify climate change and has manifested as a defining issue of our time; intensifying the frequency and severity of extreme weather events, producing sea-level rise with the potential to displace millions, causing the loss of large freshwater reservoirs, reducing biodiversity in key biomes, among other effects. Though the question of why, and how, climate change operates, and what we can do to mitigate its effect on the Earth of our lifetime, is an arduously nonlinear problem that climate scientists have battled with for decades, both in the laboratory and in politics. One of the questions within this contention is how large local out-gassing events of volatile aerosols during volcanic eruptions, like carbon dioxide and sulfur dioxide, have historically effected the Earth, from the last ice-age to the explosive evolution following it. Here we have developed a simple radiative energy balance model for the Earth in order to investigate the effects of volcanism on this energy balance's behaviour. This model is inspired by the work of Russian climatologist Mikhail I. Budyko, who discovered the ice-albedo feedback mechanism underlying climate change through his pioneering of studies on global climate using physical models of equilibrium.
+
+In this report, we will investigate perturbations to our climate model via volcanic forcing. This will take three forms. We will analyze a presently undisturbed model that approaches steady-state, an added perturbation of volcanic aerosols derived from data collected from the 1982 El Chichón and Pinatubo eruptions published in \cite{robock}, and attempt to reproduce a snowball Earth scenario by manipulating albedo in our model to a temperature-dependent distribution. By doing this we hope to learn more about the effects of volcanism on climate change, provide a template for future investigators to analyze this problem quantitatively, and describe areas of our model and research that could benefit from further investigation.
+
+%  Figure discussion
+\section{Results}
+\subsection{Steady-State Climate Model}
+\subsection{Climate Model Following Single Volcanic Eruption}
+\subsection{Snowball Earth Or whatever we decide to put here}
+
+\section{Discussion}
+\subsection{Steady-State Climate Model}
+\subsection{Climate Model Following Single Volcanic Eruption}
+\subsection{Snowball Earth Or whatever we decide to put here}
+
+\section{Conclusion}
+\subsection{Future Work}
+
+\newpage
+
+\begin{appendices}
+
+\section{Ancillary Information}
+\subsection{Author Contributions}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rrr}
+    Section & Subsection & Contributors \\
+    \hline
+    Graphic & Problem 1 & M  \\
+    Code & Problem 2 & P \\
+    Code & Problem 3 & P, E, and M \\
+    Code & Problem 4 & P, E, and M \\
+    Introduction & Introduction & M \\
+    Results & Steady-State Climate Model & n/a \\
+    Results & Perturbation: Single Volcanic Eruption & n/a \\
+    Results & Snowball Earth & n/a\\
+    Discussion & Steady-State Climate Model & n/a \\
+    Discussion & Perturbation: Single Volcanic Eruption & n/a \\
+    Discussion & Snowball Earth & n/a\\
+    Conclusion & Future Work & n/a \\
+    Conclusion & Summary & n/a \\
+    \end{tabular}
+    % \caption{Author Contributions}
+    \label{tab:contributions}
+\end{table}
+\FloatBarrier
+
+\subsection{Algorithm Development}
+Add your algorithm implementation and development here. See Algorithm~\ref{alg:example} for how to include an algorithm in your document. This is how to make an \textit{ordered} list:
+\begin{enumerate}
+    \item Identify 6 latitudinal zones. Namely between $0-30^{\circ}NS$, $30-60^{\circ}NS$ and $60-90^{\circ}NS$.
+    \item Determine parameters associated with each area.
+    \item Solve ODE numerically using Paul Matlashewski's ClimateModel.py library.  
+\end{enumerate}
+
+\subsection{Python Functions}
+Add your important MATLAB functions here with a brief implementation explanation. This is how to make an \textbf{unordered} list:
+% \begin{itemize}
+%     \item \texttt{y = linspace(x1,x2,n)} returns a row vector of \texttt{n} evenly spaced points between \texttt{x1} and \texttt{x2}. 
+%     \item \texttt{[X,Y] = meshgrid(x,y)} returns 2-D grid coordinates based on the coordinates contained in the vectors \texttt{x} and \texttt{y}. \text{X} is a matrix where each row is a copy of \texttt{x}, and \texttt{Y} is a matrix where each column is a copy of \texttt{y}. The grid represented by the coordinates \texttt{X} and \texttt{Y} has \texttt{length(y)} rows and \texttt{length(x)} columns.  
+% \end{itemize}
+
+% Python Codes
+\subsection{Python Code}
+Add your Python code here. This section will not be included in your page limit of six pages.
+
+% \begin{listing}[h]
+% \inputminted{matlab}{example.m}
+% \caption{Example code from external file.}
+% \label{listing:examplecode}
+% \end{listing}
+\subsection{Data}
+\subsubsection{Eruption Times Series}
+\subsubsection{Parameters}
+
+\newpage
+\section{References}
+\printbibliography
+
+\end{appendices}
+
+\end{document}
+
+% Add your theoretical background here. Some example text: As we learned from our textbook \cite{kutz_2013}, Fourier introduced the concept of representing a given function $f(x)$ by a trigonometric series of sines and cosines:
+% \begin{equation}
+%     f(x) = \frac{a_0}{2} + \sum_{i=1}^\infty \left(a_n\cos{nx} + b_n\sin{nx}\right) \quad x \in (-\pi,\pi].
+%     \label{eqn:fourierseries}
+% \end{equation}
+% You can reference numbered equations, figures, tables, algorithms, and code like this: Equation~\ref{eqn:fourierseries}, etc.
+
+% \begin{algorithm}
+% \begin{algorithmic}
+%     \STATE{Import data from \texttt{Testdata.mat}}
+%     \FOR{$j = 1:20$}
+%         \STATE{Extract measurement $j$ from \texttt{Undata}}
+%         \STATE{Do something useful}
+%     \ENDFOR
+%     \IF{$i\geq 5$} 
+%         \STATE{$i\gets i-1$}
+%     \ELSE
+%         \IF{$i\leq 3$}
+%             \STATE{$i\gets i+2$}
+%         \ENDIF
+%     \ENDIF 
+% \end{algorithmic}
+% \caption{Radiative Box Model}
+% \label{alg:example}
+% \end{algorithm}
+
+
+% begin{figure}[tb] % t = top, b = bottom, etc.
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.5\linewidth]{dubs.jpg}
+%     \caption{Here is a picture of Dubs \cite{webeck_2018}. Dubs did not swallow a marble.}
+%     \label{fig:dubs}
+% \end{figure}
+
+% References
+% https://www.overleaf.com/learn/latex/Bibliography_management_in_LaTeX
+% https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management
+% Math
+% https://www.overleaf.com/learn/latex/Mathematical_expressions
+% https://en.wikibooks.org/wiki/LaTeX/Mathematics
+
+
+% Images
+% https://www.overleaf.com/learn/latex/Inserting_Images
+% https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
+
+
+% Tables
+% https://www.overleaf.com/learn/latex/Tables
+% https://en.wikibooks.org/wiki/LaTeX/Tables
+
+% Algorithms
+% https://www.overleaf.com/learn/latex/algorithms
+% https://en.wikibooks.org/wiki/LaTeX/Algorithms
+
+
+% Code syntax highlighting
+% https://www.overleaf.com/learn/latex/Code_Highlighting_with_minted
