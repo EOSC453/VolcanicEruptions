@@ -1,7 +1,7 @@
 {
     "Zone": {
         "1": {
-            "Geometric Factor": 1.076,
+            "Geometric Factor": 0.1076,
             "Area Fraction": 0.067,
             "Land Fraction": 0.0,
             "Ocean Fraction": 0.550925926,

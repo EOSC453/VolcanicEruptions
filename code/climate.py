@@ -106,6 +106,9 @@ class EarthModel():
         with open(file) as f:
             params = json.load(f)
 
+        # No occlusion by default
+        self.phi = lambda t: np.ones(self.size)
+
         # Model wide properties
         self.land_albedo = params['Land Albedo']
         self.land_density = params['Land Density']
@@ -219,17 +222,25 @@ class EarthModel():
 
     @property
     def flux_in(self):
-        return (
-            self.zone_gamma * self.solar_constant *
+        return (self.zone_gamma * self.solar_constant *
             (1 - self.sky_albedo) * (1 - self.zone_albedo)
         )
+
+    def set_occlusion(self, phi):
+        self.phi = phi
 
     def flux_balance(self, T):
         flux_in = self.flux_in
         flux_out = self.flux_out * T**4
         flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
         return (flux_in - flux_out + flux_zone) / self.zone_beta
-    
+
+    def flux_balance_t(self, t, T):
+        flux_in = self.flux_in * self.phi(t)
+        flux_out = self.flux_out * T**4
+        flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
+        return (flux_in - flux_out + flux_zone) / self.zone_beta
+
     def build_ode(self, f):
         self.ode = Ode(f)
         self.ode.set_initial_value(self.T0, self.t0)
