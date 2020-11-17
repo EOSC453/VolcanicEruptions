@@ -106,9 +106,6 @@ class EarthModel():
         with open(file) as f:
             params = json.load(f)
 
-        # No occlusion by default
-        self.phi = lambda t: np.ones(self.size)
-
         # Model wide properties
         self.land_albedo = params['Land Albedo']
         self.land_density = params['Land Density']
@@ -182,7 +179,80 @@ class EarthModel():
         self.T0 = None # Initial value
         self.method = 'ubc_rk4' # Integrator method
         self.ode = None
-        
+
+        # No occlusion by default
+        self.occlusion = lambda t: np.ones(self.size)
+
+        # Lag times (in seconds) between zones for a volcanic eruption
+        lag_0 = 0
+        # Lag 1: 30 degrees traveled
+        lag_1 = 3 # months
+        # Lag 2: 30 additional degrees traveled (10 at rate 1, 20 at rate 2)
+        lag_2 = lag_1 + 1 + 20 / 18
+        # The remaining lag times follow the rate from the second line
+        lag_3 = lag_2 + 30 / 18
+        lag_4 = lag_3 + 30 / 18
+        lag_5 = lag_4 + 30 / 18
+        # Convert to seconds
+        self.lags = np.array(
+            [lag_0, lag_1, lag_2, lag_3, lag_4, lag_5]
+        ) / 12 * 365.25 * 24 * 3600
+
+        # The maximum time to consider the effect of an eruption
+        self.max_eruption_time = 100 * 365.25 * 24 * 3600
+
+        self.lag_k = None
+        self.lag_t = None
+
+    def set_occlusion(self, occlusion):
+        self.occlusion = occlusion
+
+    def lagged_phi(self, k, t):
+        """Returns the lagged oclusion factor for zones away from an eruption.
+
+        Args:
+            k (int): The number of zones away from the eruption.
+            t (float): The time since the eruption in seconds.
+
+        Returns:
+            float: The occlusion factor for the zone.
+        """
+        return self.occlusion(t) if t >= self.lags[k] else 1.0
+    
+    def build_eruptions(self, zones, times):
+        n = len(zones) # number of eruptions
+        lag_k = np.empty((6, n), dtype=int)
+        for i in range(6):
+            lag_k[i] = np.array([abs(i - zone) for zone in zones], dtype=int)
+
+        self.lag_k = lag_k
+        self.lag_t = np.array(times)
+    
+    def zone_phi(self, zone, t, idxs):
+        n = len(idxs)
+        lag_k = self.lag_k[zone, idxs]
+        lag_t = self.lag_t[idxs]
+        phi_sum = np.sum([
+            self.lagged_phi(k, t - dt) for k, dt in zip(lag_k, lag_t)
+        ])
+        return np.max([0, 1 - n + phi_sum])
+
+    def phi(self, t):
+        # Only consider eruptions that have happend in the past
+        # Don't consider eruptions that have happend too far in the past
+        eruption_indices = np.where(
+            (self.lag_t <= t) &
+            (t - self.lag_t < self.max_eruption_time)
+        )[0]
+        return np.array([
+            self.zone_phi(0, t, eruption_indices),
+            self.zone_phi(1, t, eruption_indices),
+            self.zone_phi(2, t, eruption_indices),
+            self.zone_phi(3, t, eruption_indices),
+            self.zone_phi(4, t, eruption_indices),
+            self.zone_phi(5, t, eruption_indices)
+        ])
+
     @property
     def boundary_length(self):
         return np.array([
@@ -226,20 +296,20 @@ class EarthModel():
             (1 - self.sky_albedo) * (1 - self.zone_albedo)
         )
 
-    def set_occlusion(self, phi):
-        self.phi = phi
-
     def flux_balance(self, T):
         flux_in = self.flux_in
         flux_out = self.flux_out * T**4
         flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
         return (flux_in - flux_out + flux_zone) / self.zone_beta
 
-    def flux_balance_t(self, t, T):
+    def flux_balance_eruptions(self, t, T):
         flux_in = self.flux_in * self.phi(t)
         flux_out = self.flux_out * T**4
         flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
         return (flux_in - flux_out + flux_zone) / self.zone_beta
+
+    def build(self):
+        self.build_ode(lambda t, T: self.flux_balance_eruptions(t, T))
 
     def build_ode(self, f):
         self.ode = Ode(f)
