@@ -1,6 +1,8 @@
 import json
 import numpy as np
 import scipy.integrate
+import pandas as pd
+from scipy.optimize import least_squares
 
 
 class Ode(scipy.integrate.ode):
@@ -201,8 +203,14 @@ class EarthModel():
         # The maximum time to consider the effect of an eruption
         self.max_eruption_time = 100 * 365.25 * 24 * 3600
 
+        # Zone eruption times and positions
         self.lag_k = None
         self.lag_t = None
+
+        # Temperature dependent albedo parameters
+        self.temp_i = 260 # K
+        self.temp_0 = 290 # K
+        self.temp_range = (self.temp_i - self.temp_0)**2
 
     def set_occlusion(self, occlusion):
         self.occlusion = occlusion
@@ -218,40 +226,6 @@ class EarthModel():
             float: The occlusion factor for the zone.
         """
         return self.occlusion(t) if t >= self.lags[k] else 1.0
-    
-    def build_eruptions(self, zones, times):
-        n = len(zones) # number of eruptions
-        lag_k = np.empty((6, n), dtype=int)
-        for i in range(6):
-            lag_k[i] = np.array([abs(i - zone) for zone in zones], dtype=int)
-
-        self.lag_k = lag_k
-        self.lag_t = np.array(times)
-    
-    def zone_phi(self, zone, t, idxs):
-        n = len(idxs)
-        lag_k = self.lag_k[zone, idxs]
-        lag_t = self.lag_t[idxs]
-        phi_sum = np.sum([
-            self.lagged_phi(k, t - dt) for k, dt in zip(lag_k, lag_t)
-        ])
-        return np.max([0, 1 - n + phi_sum])
-
-    def phi(self, t):
-        # Only consider eruptions that have happend in the past
-        # Don't consider eruptions that have happend too far in the past
-        eruption_indices = np.where(
-            (self.lag_t <= t) &
-            (t - self.lag_t < self.max_eruption_time)
-        )[0]
-        return np.array([
-            self.zone_phi(0, t, eruption_indices),
-            self.zone_phi(1, t, eruption_indices),
-            self.zone_phi(2, t, eruption_indices),
-            self.zone_phi(3, t, eruption_indices),
-            self.zone_phi(4, t, eruption_indices),
-            self.zone_phi(5, t, eruption_indices)
-        ])
 
     @property
     def boundary_length(self):
@@ -296,6 +270,61 @@ class EarthModel():
             (1 - self.sky_albedo) * (1 - self.zone_albedo)
         )
 
+    def flux_in_albedo(self, T):
+        return (self.zone_gamma * self.solar_constant *
+            (1 - self.sky_albedo) * (1 - self.alpha(T))
+        )
+
+    def build_eruptions(self, zones, times):
+        n = len(zones) # number of eruptions
+        lag_k = np.empty((6, n), dtype=int)
+        for i in range(6):
+            lag_k[i] = np.array([abs(i - zone) for zone in zones], dtype=int)
+
+        self.lag_k = lag_k
+        self.lag_t = np.array(times)
+    
+    def zone_phi(self, zone, t, idxs):
+        n = len(idxs)
+        lag_k = self.lag_k[zone, idxs]
+        lag_t = self.lag_t[idxs]
+        phi_sum = np.sum([
+            self.lagged_phi(k, t - dt) for k, dt in zip(lag_k, lag_t)
+        ])
+        return np.max([0, 1 - n + phi_sum])
+
+    def phi(self, t):
+        # Only consider eruptions that have happend in the past
+        # Don't consider eruptions that have happend too far in the past
+        eruption_indices = np.where(
+            (self.lag_t <= t) &
+            (t - self.lag_t < self.max_eruption_time)
+        )[0]
+        return np.array([
+            self.zone_phi(0, t, eruption_indices),
+            self.zone_phi(1, t, eruption_indices),
+            self.zone_phi(2, t, eruption_indices),
+            self.zone_phi(3, t, eruption_indices),
+            self.zone_phi(4, t, eruption_indices),
+            self.zone_phi(5, t, eruption_indices)
+        ])
+
+    def quadratic_albedo(self, T):
+        a0 = self.zone_albedo
+        ai = self.ice_albedo * np.ones_like(T)
+        T0 = self.temp_0
+        return a0 + (ai - a0) * (T - T0)**2 / self.temp_range
+
+    def alpha(self, T):
+        mask1 = T <= self.temp_i
+        mask2 = T >= self.temp_0
+        return np.where(
+            mask1, self.ice_albedo * np.ones_like(T),
+            np.where(
+                mask2, self.zone_albedo, self.quadratic_albedo(T)
+            )
+        )
+
     def flux_balance(self, T):
         flux_in = self.flux_in
         flux_out = self.flux_out * T**4
@@ -304,6 +333,18 @@ class EarthModel():
 
     def flux_balance_eruptions(self, t, T):
         flux_in = self.flux_in * self.phi(t)
+        flux_out = self.flux_out * T**4
+        flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
+        return (flux_in - flux_out + flux_zone) / self.zone_beta
+
+    def flux_balance_eruptions_albedo(self, t, T):
+        flux_in = self.flux_in_albedo(T) * self.phi(t)
+        flux_out = self.flux_out * T**4
+        flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
+        return (flux_in - flux_out + flux_zone) / self.zone_beta
+
+    def flux_balance_albedo(self, t, T):
+        flux_in = self.flux_in_albedo(T)
         flux_out = self.flux_out * T**4
         flux_zone = np.matmul(self.boundary_matrix, T) / self.zone_area
         return (flux_in - flux_out + flux_zone) / self.zone_beta
@@ -332,3 +373,44 @@ class EarthModel():
             self.zone_ocean * ocean +
             self.zone_ice * ice
         )
+
+# Fit curve to eruption data
+def fit_eruption(year, value, weights=None):
+    if weights is None:
+        weights = np.ones_like(value)
+
+    # Translate eruption time to a small number greater than 0
+    eps = 0.01
+    t = year - year[0] + eps
+
+    # Transform values to look like ~ 1/t
+    data = value / value[-1]
+    data = 1 / data
+    data = data - 1
+
+    # Find a least squares fit to the eruption curve using a 1/t function
+    sol = least_squares(lambda x: weights * (x[0]/(t - x[1])**2 - data), [1, 0])
+
+    # Transform to an "occluding" function that reduces incoming radiation
+    # for time in seconds since the eruption
+    def phi(t):
+        # Function was fit in years.
+        t = t / 365.25 / 24 / 3600
+        return 1 / (sol.x[0]/(t - sol.x[1])**2 + 1)
+
+    return phi
+
+def fit_eruption_data(files):
+    file_1 = files[0]
+    file_2 = files[1]
+
+    # Eruption 1 fit
+    df = pd.read_csv(file_1)
+    phi_1= fit_eruption(df['date'].values, df['value'].values)
+    
+    # Eruption 2 fit
+    df = pd.read_csv(file_2)
+    phi_2 = fit_eruption(df['date'].values, df['value'].values)
+
+    # Take phi as the average of the two fits
+    return lambda t: 0.5 * (phi_1(t)  + phi_2(t))
