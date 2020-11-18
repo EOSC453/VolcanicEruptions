@@ -210,7 +210,7 @@ class EarthModel():
         # Temperature dependent albedo parameters
         self.temp_i = 260 # K
         self.temp_0 = 290 # K
-        self.temp_range = (self.temp_i - self.temp_0)**2
+        self.alpha_max = self.ice_albedo
 
     def set_occlusion(self, occlusion):
         self.occlusion = occlusion
@@ -270,6 +270,11 @@ class EarthModel():
             (1 - self.sky_albedo) * (1 - self.zone_albedo)
         )
 
+    @property
+    def temp_range(self):
+        return (self.temp_i - self.temp_0)**2
+
+
     def flux_in_albedo(self, T):
         return (self.zone_gamma * self.solar_constant *
             (1 - self.sky_albedo) * (1 - self.alpha(T))
@@ -311,7 +316,7 @@ class EarthModel():
 
     def quadratic_albedo(self, T):
         a0 = self.zone_albedo
-        ai = self.ice_albedo * np.ones_like(T)
+        ai = self.alpha_max * np.ones_like(T)
         T0 = self.temp_0
         return a0 + (ai - a0) * (T - T0)**2 / self.temp_range
 
@@ -319,7 +324,7 @@ class EarthModel():
         mask1 = T <= self.temp_i
         mask2 = T >= self.temp_0
         return np.where(
-            mask1, self.ice_albedo * np.ones_like(T),
+            mask1, self.alpha_max * np.ones_like(T),
             np.where(
                 mask2, self.zone_albedo, self.quadratic_albedo(T)
             )
