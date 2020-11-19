@@ -1,4 +1,7 @@
 .vscode
 *.DS_Store
-*.pdf
 *__pycache__
+*.bcf
+*.xml
+*.gz
+*_minted_report
