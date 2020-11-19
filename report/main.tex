@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
@@ -7,6 +7,7 @@
 \usepackage{longtable}  % for bringing in our data tables to the appendix
 \usepackage{amsmath,amsfonts,amssymb,mathtools}
 \usepackage{graphicx,float}
+\usepackage{makecell}
 \usepackage{caption}
 \usepackage{csvsimple,booktabs} % load csv data into table
 \usepackage{filecontents} % read csv data contents
@@ -30,8 +31,8 @@
 \begin{document}
 
 \maketitle
+\newpage
 \tableofcontents
-
 \newpage
 
 % Introduction and Overview
@@ -65,6 +66,47 @@ with a Poisson distribution of volcanic eruptions, temporally and spatially, to
 simulate a snowball Earth scenario.
 WE SHOULD ADD A BIT ABOUT OUR GENERAL ASSUMPTIONS HERE
 
+\subsection{Budyko Climate Model}
+
+\subsection{Volcanic Eruptions}
+
+\subsubsection{Direct Radiation Occlusion}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{occlusion.pdf}
+    \caption{
+        Plot of $\phi(t)$; occlusion factor. An occlusion factor of 0.7
+        represents a $30\%$ reduction in total incoming solar radiation.
+    }
+    \label{fig:occlusion}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Spatial Distribution of Aerosols}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{occlusion_space.pdf}
+    \caption{
+        The spatial effect of eruptions.
+    }
+    \label{fig:occlusion_space}
+\end{figure}
+\FloatBarrier
+
+\subsubsection{Stochastic Eruption Frequency}
+
+\subsection{Ice-Albedo Feedback}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{albedo.pdf}
+    \caption{
+        Albedo parameterization as a function of temperature in each zone.
+    }
+    \label{fig:albedotemp}
+\end{figure}
+\FloatBarrier
+
 % Figure results
 \section{Results}
 \label{section:results}
@@ -79,7 +121,7 @@ steady-state model where inter-zonal transfer is allowed, we solve for the
 equilibrium temperatures by integrating forward in time
 (Figure \ref{fig:steadystate}).
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{Question2.png}
     \caption{
@@ -122,19 +164,7 @@ Figure \ref{fig:oneerupt} shows our solution post eruption.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.5]{occlusion.png}
-    \caption{
-        Plot of $\phi(t)$; occlusion factor. An occlusion factor of 0.7
-        represents a $30\%$ reduction in total incoming solar radiation.
-    }
-    \label{fig:occlusion}
-\end{figure}
-\FloatBarrier
-
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{oneerupt.png}
+    \includegraphics[scale=0.6]{one_eruption.pdf}
     \caption{
         Reduction in solar forcing post eruption results in temperature drop.
     }
@@ -142,12 +172,62 @@ Figure \ref{fig:oneerupt} shows our solution post eruption.
 \end{figure}
 \FloatBarrier
 
-\subsection{Snowball Earth: Stochastic Volcanism and Temperature-Dependent Albedo}
-As a possible scenario for global glaciation, we couple a Poisson distribution
-of eruptions, both temporally and spatially, with a temperature-dependent
-parameterization of albedo. This coupling is shown in Figure
-\ref{fig:fireandice}, and will be discussed after looking at the mechanisms in
-isolation. \\
+\subsection{The Ice-Albedo Effect}
+
+\begin{center}
+    \begin{tabular}{ c | c | c | c }
+      \hline
+      \thead{Zone} & 
+      \thead{Warm Earth \\ Equilibrium Temperature [K]} &
+      \thead{Unstable \\ Equilibrium Temperature [K]} &
+      \thead{Snowball Earth \\ Equilibrium Temperature [K]} \\
+      \hline
+        1 & 217.23 & 217.23 & 217.23 \\
+        2 & 279.74 & 279.74 & 279.74 \\
+        3 & 296.45 & 296.45 & 296.45 \\
+        4 & 294.56 & 294.56 & 294.56 \\ 
+        5 & 263.56 & 263.56 & 263.56 \\
+        6 & 225.33 & 225.33 & 225.33 \\
+    \hline
+    \end{tabular}
+  \end{center}
+
+% \begin{table}[H]
+%     \parbox{.45\linewidth}{
+%     \captionsetup{singlelinecheck = false, justification=justified}
+%     \caption{Ice-Albedo Temperature Equilibria}
+%     \begin{tabular}{ll}
+%     \hline
+%     \thead{Zone} & \thead{Warm Earth \\ Equilibrium Temperature [$^{\circ}$K]}  \\
+%     \hline
+%     1 & 217.23 \\
+%     2 & 279.74 \\
+%     3 & 296.45 \\
+%     4 & 294.56 \\ 
+%     5 & 263.56 \\
+%     6 & 225.33 \\
+%     \end{tabular}
+%     \label{tab:supressedteq}
+% }
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{albedo_equilibria_1plot.pdf}
+    \caption{
+        Integrating through climate model incorporating both stochastic volcanic
+        eruptions and ice-albedo feedback parameterization.
+    }
+    \label{fig:albedo_equil}
+\end{figure}
+\FloatBarrier
+
+\subsection{Snowball Earth: Stochastic Volcanism and Temperature-Dependent
+Albedo} As a possible scenario for global glaciation, we couple a Poisson
+distribution of eruptions, both temporally and spatially, with a
+temperature-dependent parameterization of albedo. This coupling is shown in
+Figure \ref{fig:fireandice}, and will be discussed after looking at the
+mechanisms in isolation. \\
 
 The interval post-origin for stochastic eruptive behaviour has been extended to
 100 years visualize a return to equilibrium more clearly. From Figure
@@ -159,7 +239,7 @@ this extended time scale.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.4]{stocerupt.png}
+    \includegraphics[scale=0.6]{stochastic_eruptions.pdf}
     \caption{
         Stochastic eruption distribution following Poisson distribution.
         Vertical dotted lines are colored based on the zone the eruption
@@ -167,6 +247,17 @@ this extended time scale.
         eruption is initiated.
     }
     \label{fig:stocherupt}
+\end{figure}
+\FloatBarrier
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{eruptions_albedo.pdf}
+    \caption{
+        Integrating through climate model incorporating both stochastic volcanic
+        eruptions and ice-albedo feedback parameterization.
+    }
+    \label{fig:fireandice}
 \end{figure}
 \FloatBarrier
 
@@ -180,16 +271,6 @@ $\alpha_k$ (See Table \ref{tab:zoneparams}). Temperatures below $250^{\circ}K$
 replace these with a constant ice albedo, while the interval between describes a
 quadratic growth from $\alpha_k$ to $\alpha_i$ as temperature declines.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{albedotemp.png}
-    \caption{
-        Albedo parameterization as a function of temperature in each zone.
-    }
-    \label{fig:albedotemp}
-\end{figure}
-\FloatBarrier
-
 By coupling these processes, and ranging through a series of initial temperature
 conditions in each zone, we are able to find a numerical snowball Earth in
 Figure \ref{fig:fireandice}. Similarly to our observations of Figure
@@ -199,17 +280,6 @@ $1.75e9-2.1e9$ seconds, this effect causes temperatures to drop below the lower
 threshold of our albedo parameterization, $T_i$ and plummet to a new state
 between approximately $225-245^{\circ}K$. This phenomenon will be expanded on
 in Section \ref{sec:snowballearth}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.4]{eruptandice.png}
-    \caption{
-        Integrating through climate model incorporating both stochastic volcanic
-        eruptions and ice-albedo feedback parameterization.
-    }
-    \label{fig:fireandice}
-\end{figure}
-\FloatBarrier
 
 \section{Discussion}
 Here we will discuss the possible processes behind the numerical behavior of our
@@ -260,6 +330,7 @@ evident in zones 2 and 1, and suggests they have little dependence on
 temperature characteristics within the northern zones. 
 
 \subsection{Climate Model Following Single Volcanic Eruption}
+\subsection{The Ice-Albedo Effect}
 \subsection{Snowball Earth: Stochastic Volcanism and Temperature-Dependent Albedo}
 \label{sec:snowballearth}
 
