@@ -67,8 +67,81 @@ simulate a snowball Earth scenario.
 WE SHOULD ADD A BIT ABOUT OUR GENERAL ASSUMPTIONS HERE
 
 \subsection{Budyko Climate Model}
+The evolution of Earth's temperature will be investigated using a Budyko
+climate model \parencite{budyko_albedo}. The earth is divided into 6 latitudinal
+zones, defined by the latitudes shown in table \ref{tab:latitudes} and figure
+\ref{fig:zones}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{ c | c | c }
+        \hline
+        \thead{Zone} & 
+        \thead{Lower Latitude} &
+        \thead{Upper Latitude} \\
+        \hline
+        1 & $90^\circ S$ & $60^\circ S$ \\
+        2 & $60^\circ S$ & $30^\circ S$ \\
+        3 & $30^\circ S$ & $0^\circ$ \\
+        4 & $0^\circ$ & $30^\circ N$ \\
+        5 & $30^\circ S$ & $60^\circ N$ \\
+        6 & $60^\circ S$ & $90^\circ N$ \\
+        \hline
+    \end{tabular}
+    \caption{Zone latitudes.}
+    \label{tab:latitudes}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{zones.png}
+    \caption{Latitude zone intervals.}
+    \label{fig:zones}
+\end{figure}
+\FloatBarrier
+
+Within each zone, temperature evolves through radiative heat fluxes entering the
+earth through solar radiation, heat fluxes leaving the earth as long-wave
+radiation and the exchange of heat between zones. These effects are quantified
+through
+\begin{equation} \label{eqn:budyko}
+    \frac{dT_k}{dt} = \frac{1}{\mean{\rho_kc_k[Z_k]}}
+    \{
+      \gamma_k(1-\alpha_k^{sky})(1-\Bar{\alpha}_k)S_0-\tau\sigma_BT_k^{4}
+    \} +
+    \frac{L_{ki}k_{ki}}{{A_k}\mean{\rho_kc_k[Z_k]}}(T_{k}-T_{i})
+\end{equation}
+where $k = 1,\dots,6$ represents each latitudinal zone and $T_k$ is the zonal
+temperature. The remaining constants are defined in tables \ref{tab:zoneparams}
+and \ref{tab:globalparams} of section \ref{sec:Parameters}.
 
 \subsection{Volcanic Eruptions}
+Volcanism is an important natural cause of climate change across a range of
+timescales \parencite{robock}. For our investigation, we will consider the
+short-term cooling effects of volcanism that occur on a $1-10$ year time frame.
+We introduce these effects to our model by adding an occlusion factor,
+$\phi(t)$,  to each zone in the model. The
+occlusion factor represents the presence of volcanic aerosols suspended in the
+atmosphere that block incoming solar radiation. The introduction of $\phi_k(t)$
+transforms equation \ref{eqn:budyko} to
+\begin{equation} \label{eqn:occlusion}
+\frac{dT_k}{dt} = \frac{1}{\mean{\rho_kc_k[Z_k]}}
+\{
+    \phi_k(t)\gamma_k(1-\alpha_k^{sky})(1-\Bar{\alpha}_k)S_0-\tau\sigma_BT_k^{4}
+\} +
+\frac{L_{ki}k_{ki}}{{A_k}\mean{\rho_kc_k[Z_k]}}(T_{k}-T_{i})
+\end{equation}
+A value of $\phi(t) = 1$ represents no volcanic aerosol occlusion while a value
+of $\phi(t) = 0.7$, for example, represents a $30\%$ reduction in total
+incoming solar radiation. \\
+
+Based on observations of the reduction of solar radiation after the
+1982 El Chichón eruption and the 1991 Pinatubo eruption \parencite{robock},
+an empirical curve that best fit the data was used for $\phi(t)$, as shown
+in figure \ref{fig:occlusion}. We found that a function with the form
+$\phi(t) = 1 - ct^{-2}$ where $c$ is a constant found through nonlinear
+regression gave a reasonable representation of the data with the property
+that $\phi(t) \to 1$ as $t \to \infty$.
 
 \subsubsection{Direct Radiation Occlusion}
 \begin{figure}[H]
@@ -83,6 +156,7 @@ WE SHOULD ADD A BIT ABOUT OUR GENERAL ASSUMPTIONS HERE
 \FloatBarrier
 
 \subsubsection{Spatial Distribution of Aerosols}
+
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{occlusion_space.pdf}
@@ -182,33 +256,15 @@ Figure \ref{fig:oneerupt} shows our solution post eruption.
       \thead{Unstable \\ Equilibrium Temperature [K]} &
       \thead{Snowball Earth \\ Equilibrium Temperature [K]} \\
       \hline
-        1 & 217.23 & 217.23 & 217.23 \\
-        2 & 279.74 & 279.74 & 279.74 \\
-        3 & 296.45 & 296.45 & 296.45 \\
-        4 & 294.56 & 294.56 & 294.56 \\ 
-        5 & 263.56 & 263.56 & 263.56 \\
-        6 & 225.33 & 225.33 & 225.33 \\
+      1 & 274.02 & 251.08 & 231.91 \\
+      2 & 279.27 & 255.03 & 234.30 \\
+      3 & 282.21 & 258.31 & 236.23 \\
+      4 & 280.83 & 257.78 & 236.13 \\ 
+      5 & 279.66 & 256.98 & 235.70 \\
+      6 & 274.83 & 253.11 & 233.20 \\
     \hline
     \end{tabular}
   \end{center}
-
-% \begin{table}[H]
-%     \parbox{.45\linewidth}{
-%     \captionsetup{singlelinecheck = false, justification=justified}
-%     \caption{Ice-Albedo Temperature Equilibria}
-%     \begin{tabular}{ll}
-%     \hline
-%     \thead{Zone} & \thead{Warm Earth \\ Equilibrium Temperature [$^{\circ}$K]}  \\
-%     \hline
-%     1 & 217.23 \\
-%     2 & 279.74 \\
-%     3 & 296.45 \\
-%     4 & 294.56 \\ 
-%     5 & 263.56 \\
-%     6 & 225.33 \\
-%     \end{tabular}
-%     \label{tab:supressedteq}
-% }
 
 
 \begin{figure}[H]
@@ -367,13 +423,6 @@ temperature characteristics within the northern zones.
 \end{table}
 
 \subsection{Algorithm Development}
-\begin{figure}[H]
-    \centering
-    \includegraphics[scale=0.3]{zones.png}
-    \caption{Graphic depicting zone intervals.}
-    \label{fig:zones}
-\end{figure}
-\FloatBarrier
 
 \begin{figure}[H]
     \centering
@@ -495,7 +544,7 @@ temperature characteristics within the northern zones.
     }
 \end{table}
 
-\subsubsection{Parameters}
+\subsubsection{Parameters} \label{sec:Parameters}
 \begin{table}[H]
     \parbox{.45\linewidth}{
     \captionsetup{singlelinecheck = false, justification=justified}
