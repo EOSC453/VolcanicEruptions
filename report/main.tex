@@ -531,20 +531,20 @@ temperature characteristics within the northern zones.
     Introduction & Spatial Distribution of Aerosols & P \\
     Introduction & Ice-albedo Feedback & P \\ 
     Results & Steady-State Climate & M \\
-    Results & Perturbation: Single Volcanic Eruption & M \\
+    Results & Perturbation: Single Volcanic Eruption & M, E, P \\
     Results & Fire and Ice & M and P\\
     Discussion & Steady-State Climate Model & M \\
     Discussion & Perturbation: Single Volcanic Eruption & P \\
-    Discussion & Fire and Ice & P, E, M\\
+    Discussion & Fire and Ice & E, P, M\\
+    Discussion & Model Limitations & E, P, M\\
     Conclusion & Future Work & E, M, and P \\
     Conclusion & Summary & E, M, and P \\
     \end{tabular}
     \caption{
-        In descending order: names depict relative contribution to
-        sections with more than one contributor. Contributions refers 
-        to physical writing of the report, but does not reflect discussion 
-        and preparation behind concepts as this required continuous lateral
-        communication between authors.
+        Contributions does not necessarily reflect discussion and preparation behind 
+        concepts as this required continuous lateral communication between authors. 
+        For example, all discussion sections were analyzed with
+        input from each author, but written by
     }
     \label{tab:contributions}
 \end{table}
@@ -570,21 +570,6 @@ temperature characteristics within the northern zones.
     ClimateModel.py library.  
 \end{enumerate}
 
-% \subsection{Python Functions}
-% Add your important MATLAB functions here with a brief implementation explanation. This is how to make an \textbf{unordered} list:
-% % \begin{itemize}
-% %     \item \texttt{y = linspace(x1,x2,n)} returns a row vector of \texttt{n} evenly spaced points between \texttt{x1} and \texttt{x2}. 
-% %     \item \texttt{[X,Y] = meshgrid(x,y)} returns 2-D grid coordinates based on the coordinates contained in the vectors \texttt{x} and \texttt{y}. \text{X} is a matrix where each row is a copy of \texttt{x}, and \texttt{Y} is a matrix where each column is a copy of \texttt{y}. The grid represented by the coordinates \texttt{X} and \texttt{Y} has \texttt{length(y)} rows and \texttt{length(x)} columns.  
-% % \end{itemize}
-
-% % Python Codes
-% \subsection{Python Code}
-% Add your Python code here. This section will not be included in your page limit of six pages.
-% \begin{listing}[h]
-% \inputminted{matlab}{example.m}
-% \caption{Example code from external file.}
-% \label{listing:examplecode}
-% \end{listing}
 \subsection{Data}
 
 \subsubsection{Equilibrium Temperatures: Steady State Model}
@@ -719,6 +704,33 @@ temperature characteristics within the northern zones.
     Ice Specific Heat Capacity, $c_i$ & 2060 & $JkgK^{-1}$\\
     \end{tabular}
     \label{tab:globalparams}
+\end{table}
+\FloatBarrier
+
+\begin{table}
+    \captionsetup{singlelinecheck = false, justification=justified}
+    \caption{Boundary Parameters}
+    \begin{tabular}{lll}
+    \hline
+    Parameter & Value & Units\\
+    \hline
+    Boundary 12 ($60^{\circ}S)$ & & \\
+    Boundary Length, $L_{12}$ & 2.0015e7 & $m$ \\
+    Thermal exchange coefficient, $k_{12}$ & 1e7 & $Wm^{-1}K^{-1}$ \\ 
+    Boundary 23 ($30^{\circ}S)$ & & \\
+    Boundary Length, $L_{23}$ & 3.4667e7 & $m$ \\
+    Thermal exchange coefficient, $k_{23}$ & 1e7 & $Wm^{-1}K^{-1}$ \\
+    Boundary 34 ($0^{\circ}S)$ & & \\
+    Boundary Length, $L_{34}$ & 4.0030e7 & $m$ \\
+    Thermal exchange coefficient, $k_{34}$ & 1e7 & $Wm^{-1}K^{-1}$ \\ 
+    Boundary 45 ($30^{\circ}N)$ & & \\
+    Boundary Length, $L_{45}$ & 3.4667e7 & $m$ \\
+    Thermal exchange coefficient, $k_{45}$ & 5e7 & $Wm^{-1}K^{-1}$ \\
+    Boundary 56 ($60^{\circ}N)$ & & \\
+    Boundary Length, $L_{56}$ & 2.0015e7 & $m$ \\
+    Thermal exchange coefficient, $k_{56}$ & 1e7 & $Wm^{-1}K^{-1}$ \\
+    \end{tabular}
+    \label{tab:zoneparams}
 \end{table}
 \FloatBarrier
 
