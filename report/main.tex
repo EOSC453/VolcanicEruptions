@@ -663,21 +663,6 @@ incoming solar radiation Volcanic eruptions
     ClimateModel.py library.  
 \end{enumerate}
 
-% \subsection{Python Functions}
-% Add your important MATLAB functions here with a brief implementation explanation. This is how to make an \textbf{unordered} list:
-% % \begin{itemize}
-% %     \item \texttt{y = linspace(x1,x2,n)} returns a row vector of \texttt{n} evenly spaced points between \texttt{x1} and \texttt{x2}. 
-% %     \item \texttt{[X,Y] = meshgrid(x,y)} returns 2-D grid coordinates based on the coordinates contained in the vectors \texttt{x} and \texttt{y}. \text{X} is a matrix where each row is a copy of \texttt{x}, and \texttt{Y} is a matrix where each column is a copy of \texttt{y}. The grid represented by the coordinates \texttt{X} and \texttt{Y} has \texttt{length(y)} rows and \texttt{length(x)} columns.  
-% % \end{itemize}
-
-% % Python Codes
-% \subsection{Python Code}
-% Add your Python code here. This section will not be included in your page limit of six pages.
-% \begin{listing}[h]
-% \inputminted{matlab}{example.m}
-% \caption{Example code from external file.}
-% \label{listing:examplecode}
-% \end{listing}
 \subsection{Data}
 \subsubsection{Eruption Times Series}
 \begin{table}[H]
@@ -698,79 +683,80 @@ incoming solar radiation Volcanic eruptions
 
 \subsubsection{Parameters} \label{sec:Parameters}
 \begin{table}[H]
-    \parbox{.45\linewidth}{
     \captionsetup{singlelinecheck = false, justification=justified}
     \caption{Zonal Parameters}
-    \begin{tabular}{lll}
+    \begin{tabular}{llll}
     \hline
      & Parameter & Value \\
     \hline
-    Zone 1 & Geometric Factor & 0.1076 \\
-     & Area Fraction & 0.067 \\
-     & Land Fraction & 0.0 \\
-     & Ocean Fraction & 0.550925926 \\ 
-     & Ice Fraction & 0.449074074 \\
+    Zone 1 & Geometric Factor, $\gamma_1$ & 0.1076  \\
+     & Area Fraction, $A_1$ & 0.067\\
+     & Land Fraction, $f_1^s$ & 0.0 \\
+     & Ocean Fraction, $f_1^w$  & 0.550925926 \\ 
+     & Ice Fraction, $f_1^i$ & 0.449074074 \\
     \hline
-    Zone 2 & Geometric Factor & 0.2277 \\
-     & Area Fraction & 0.183 \\
-     & Land Fraction & 0.074074074 \\
-     & Ocean Fraction & 0.925925926 \\ 
-     & Ice Fraction & 0.0\\
+    Zone 2 & Geometric Factor, $\gamma_2$ & 0.2277 \\
+     & Area Fraction, $A_2$ & 0.183\\
+     & Land Fraction, $f_2^s$ & 0.074074074 \\
+     & Ocean Fraction, $f_2^w$ & 0.925925926 \\ 
+     & Ice Fraction, $f_2^i$ & 0.0\\
     \hline
-    Zone 3 & Geometric Factor & 0.3045 \\
-     & Area Fraction & 0.25 \\
-     & Land Fraction & 0.240740741 \\
-     & Ocean Fraction & 0.759259259 \\ 
-     & Ice Fraction & 0.0\\
+    Zone 3 & Geometric Factor, $\gamma_3$ & 0.3045 \\
+     & Area Fraction, $A_3$ & 0.25 \\
+     & Land Fraction, $f_3^s$ & 0.240740741 \\
+     & Ocean Fraction, $f_3^w$ & 0.759259259 \\ 
+     & Ice Fraction, $f_3^i$ & 0.0\\
     \hline
-    Zone 4 & Geometric Factor & 0.3045 \\
-     & Area Fraction & 0.25 \\
-     & Land Fraction & 0.3101851851 \\
-     & Ocean Fraction & 0.689814815 \\ 
-     & Ice Fraction & 0.0\\
+    Zone 4 & Geometric Factor, $\gamma_4$ & 0.3045 \\
+     & Area Fraction, $A_4$ & 0.25 \\
+     & Land Fraction, $f_4^s$ & 0.3101851851 \\
+     & Ocean Fraction, $f_4^w$ & 0.689814815 \\ 
+     & Ice Fraction, $f_4^i$ & 0.0 \\
     \hline
-    Zone 5 & Geometric Factor & 0.2277 \\
-     & Area Fraction & 0.183 \\
-     & Land Fraction & 0.694444444 \\
-     & Ocean Fraction & 0.305555556 \\ 
-     & Ice Fraction & 0.0\\
+    Zone 5 & Geometric Factor, $\gamma_5$ & 0.2277 \\
+     & Area Fraction, $A_5$ & 0.183 \\
+     & Land Fraction, $f_5^s$ & 0.694444444 \\
+     & Ocean Fraction, $f_5^w$ & 0.305555556 \\ 
+     & Ice Fraction, $f_5^i$ & 0.0 \\
     \hline
-    Zone 6 & Geometric Factor & 0.1076 \\
-     & Area Fraction & 0.067 \\
-     & Land Fraction & 0.277777778 \\
-     & Ocean Fraction & 0.652777778 \\ 
-     & Ice Fraction & 0.069444444\\
+    Zone 6 & Geometric Factor, $\gamma_6$ & 0.1076\\
+     & Area Fraction, $A_6$ & 0.067 \\
+     & Land Fraction, $f_6^s$ & 0.277777778\\
+     & Ocean Fraction, $f_6^w$  & 0.652777778\\ 
+     & Ice Fraction, $f_6^i$ & 0.069444444\\
     \end{tabular}
     \label{tab:zoneparams}
-    }
-    \hfill
-    \parbox{.45\linewidth}{
+\end{table}
+\FloatBarrier
+
+\begin{table}
     \captionsetup{singlelinecheck = false, justification=justified}
     \caption{Global Parameters}
     \begin{tabular}{lll}
     \hline
-    Parameter & Value & Units \\
+    Parameter & Value & Units\\
     \hline
-    Stefan-Boltzmann Constant & 5.6696e-8 & $Wm^{-2}K^{-4}$ \\
-    Solar Constant & 1368 & $Wm^{-2}$ \\
-    Earth Radius & 6371e3 & $m$ \\
-    Earth Total Emissivity & 1  \\
-    Atmospheric Transmissivity & 0.63  \\
-    Atmospheric Albedo & 0.2 \\
-    Land Albedo & 0.4 \\
-    Ocean Albedo & 0.1\\
-    Ice Albedo & 0.6 \\
-    Land Density & 2500 & $kgm^{-3}$\\
-    Ocean Density & 1028 & $kgm^{-3}$\\
-    Ice Density & 900 & $kgm^{-3}$\\
-    Land Thermal Scale Depth & 1.0 & $m$ \\
-    Ocean Thermal Scale Depth & 70.0 & $m$ \\
-    Ice Thermal Scale Depth & 1.0 & $m$ \\
-    Land Specific Heat Capacity & 790 & $JkgK^{-1}$\\
-    Ocean Specific Heat Capacity & 4187 & $JkgK^{-1}$\\
-    Ice Specific Heat Capacity & 2060 & $JkgK^{-1}$\\
+    Stefan-Boltzmann Constant, $\sigma_B$ & 5.6696e-8 & $Wm^{-2}K^{-4}$ \\
+    Solar Constant, $S_0$ & 1368 & $Wm^{-2}$ \\
+    Earth Radius, $R_E$ & 6371e3 & $m$ \\
+    Earth Total Emissivity, $\epsilon$  & 1  \\
+    Surfacea Area of Earth, $A_E$ & $\pi R_E^2$ & $m^2$ \\
+    Atmospheric Transmissivity, $\tau$ & 0.63  \\
+    Atmospheric Albedo, $\alpha_{sky}$ & 0.2 \\
+    Land Albedo, $\alpha_s$ & 0.4 \\
+    Ocean Albedo, $\alpha_w$ & 0.1\\
+    Ice Albedo, $\alpha_i$ & 0.6 \\
+    Land Density, $\rho_s$ & 2500 & $kgm^{-3}$\\
+    Ocean Density, $\rho_w$ & 1028 & $kgm^{-3}$\\
+    Ice Density, $\rho_i$ & 900 & $kgm^{-3}$\\
+    Land Thermal Scale Depth, $[Z_s]$ & 1.0 & $m$ \\
+    Ocean Thermal Scale Depth, $[Z_w]$ & 70.0 & $m$ \\
+    Ice Thermal Scale Depth, $[Z_i]$ & 1.0 & $m$ \\
+    Land Specific Heat Capacity, $c_s$ & 790 & $JkgK^{-1}$\\
+    Ocean Specific Heat Capacity, $c_w$ & 4187 & $JkgK^{-1}$\\
+    Ice Specific Heat Capacity, $c_i$ & 2060 & $JkgK^{-1}$\\
     \end{tabular}
-    \label{tab:globalparams}}
+    \label{tab:globalparams}
 \end{table}
 \FloatBarrier
 
