@@ -205,7 +205,7 @@ the occlusion function defined in sections \ref{sec:Occlusion} and
 Earth that includes the time-decaying effects of aerosol occlusion, the spatial
 dispersion of aerosols and temporal volcanic intensity.
 
-\subsection{Ice-Albedo Feedback}
+\subsection{Ice-Albedo Feedback} \label{sec:Ice}
 The volcanism defined in section \ref{sec:Volcanos} provides a mechanism to
 cool the Earth by occluding direct solar radiation with suspended volcanic
 aerosols. One interesting way to study the implications of this cooling is by
@@ -324,14 +324,14 @@ occurred. The eruption intensity parameters used are given in table
     \begin{tabular}{ c | c }
       \hline
       \thead{Zone} & 
-      \thead{$\lambda_k [\text{yr}^-1]$} \\
+      \thead{$\lambda_k [\text{yr}^{-1}]$} \\
       \hline
-      1 & 150 \\
-      2 & 75 \\
-      3 & 50 \\
-      4 & 50 \\ 
-      5 & 75 \\
-      6 & 150 \\
+      1 & 100 \\
+      2 & 50 \\
+      3 & 20 \\
+      4 & 20 \\ 
+      5 & 50 \\
+      6 & 100 \\
     \hline
     \end{tabular}
     \caption{Volcanic intensity rate parameters}
@@ -350,30 +350,21 @@ occurred. The eruption intensity parameters used are given in table
 \end{figure}
 \FloatBarrier
 
-The interval model was run for 100 years show multiple cycles of temperature
-drop and recovery. From Figure
+The model was run for 100 years to show multiple cycles of temperature
+drops and recoveries. From Figure
 \ref{fig:stocherupt}, we see that following each eruption is a decline in zonal
 temperatures, and sufficiently close eruptions, in time, compound that effect.
 The distribution lag associated with aerosol spreading is still represented
 numerically, though a lag of a few months is difficult to discern visually on
 this extended time scale. 
 
-\subsection{The Ice-Albedo Effect}
-In Figure \ref{fig:albedo_equil} we have coupled our ice albedo parameterization
-to our climate model to visualize its dynamic, nonlinear effect on climate forcing.
-
-Hence, we recognize three equilibria, two of which are stable and one that is 
-unstable. If we begin the model at the unstable equilibrium temperatures defined 
-in Table \ref{tab:eqstates}, a small positive temperature perturbation causes zonal
-temperatures to increase asymptotically to the upper equilibrium (dashed lines). 
-Conversely, a small negative perturbation causes zonal temperatures to approach the lower 
-equilibrium asymptotically (dotted lines). These scenarios are represented by the 
-warm Earth and snowball Earth sections, respectively. Note that the warm Earth 
-equilibrium has zonal temperatures that are similar to the steady-state described in
-Figure \ref{fig:steadystate}, though zones below the upper threshold temperature 
-have temperatures that are slightly perturbed from our original model. In the 
-lower equilibrium case, the temperature difference between high-latitudinal and 
-mid-latitudinal zones is much smaller.
+\subsection{The Ice-Albedo Effect} \label{sec:ice_albedo_results}
+Figure \ref{fig:albedo_equil} shows the result of the temperature dependent albedo
+from in equation \ref{eqn:albedoparam} coupled with our climate model in
+equation \ref{eqn:budyko}. The temperature ranges for the nonlinear albedo model
+are coloured similar to figure \ref{fig:albedotemp}. We recognize three temperature equilibria,
+two of which are stable and one that is unstable. The equilibrium temperature
+distributions are shown in table \ref{tab:eqstates}.
 
 \begin{table}
     \begin{tabular}{ c | c | c | c }
@@ -395,7 +386,6 @@ mid-latitudinal zones is much smaller.
     \label{tab:eqstates}
 \end{table}
 
-
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{albedo_equilibria_1plot.pdf}
@@ -407,41 +397,65 @@ mid-latitudinal zones is much smaller.
 \end{figure}
 \FloatBarrier
 
-\subsection{Snowball Earth: Stochastic Volcanism and Temperature-Dependent
-Albedo} 
+A model started with an initial temperature distribution at the unstable equilibrium
+(solid lines in figure \ref{fig:albedo_equil}) remains at the unstable equilibrium. \\
 
+A model started with an initial temperature distribution perturbed slightly above
+the unstable equilibrium (dashed lines in figure \ref{fig:albedo_equil}) asymptotically
+approaches the ``warm Earth'' equilibrium shown in table \ref{tab:eqstates}. \\
 
+A model started with an initial temperature distribution perturbed slightly below
+the unstable equilibrium (dotted lines in figure \ref{fig:albedo_equil}) asymptotically
+approaches the ``snowball Earth'' equilibrium shown in table \ref{tab:eqstates}.
+The temperature difference between high-latitudinal and mid-latitudinal zones is much
+smaller for the snowball Earth equilibrium compared to the warm Earth equilibrium.
+
+\subsection{Fire and Ice: Stochastic Volcanism and the Ice-Albedo Feedback} 
+Figure \ref{fig:fireandice} shows the results of two models that combine
+volcanism defined in section \ref{sec:Volcanos} with the ice-albedo feedback
+defined in section \ref{sec:Ice}. The temperature ranges for the nonlinear albedo model
+are coloured similar to figure \ref{fig:albedotemp}. The ``Stable Eruption Frequency'' and
+``Unstable Eruption Frequency'' models were forced with the eruption intensity
+rate parameters shown in table \ref{tab:lambda_stochastic_ice}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{ c | c | c}
+      \hline
+      \thead{Zone} & 
+      \thead{Stable Eruption Frequency \\ $\lambda_k [\text{yr}^{-1}]$} &
+      \thead{Unstable Eruption Frequency \\ $\lambda_k [\text{yr}^{-1}]$} \\
+      \hline
+      1 & 150 & 100 \\
+      2 & 75 & 50 \\
+      3 & 50 & 20 \\
+      4 & 50 & 20 \\ 
+      5 & 75 & 50 \\
+      6 & 150 & 100 \\
+    \hline
+    \end{tabular}
+    \caption{
+        Volcanic intensity rate parameters for the volcanism with ice-albedo
+        feedback models
+    }
+    \label{tab:lambda_stochastic_ice}
+\end{table}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\linewidth]{eruptions_albedo.pdf}
     \caption{
-        Integrating through climate model incorporating both stochastic volcanic
-        eruptions and ice-albedo feedback parameterization.
+        Model results for volcanism combined with the ice-albedo feedback.
     }
     \label{fig:fireandice}
 \end{figure}
 \FloatBarrier
 
-To incorporate variable albedo, we define a piece-wise albedo parameterization
-dependent on zonal temperature (Adapted from \cite{jellinek_ps}).
-The parameterization follows the form of Equation\ref{eqn:albedoparam}
-(Section \ref{sec:eqns}), and ascribes behavior based on each zone's basal
-albedo and temperature range (Figure \ref{fig:albedotemp}). Temperatures above
-$280^{\circ}K$ allow each zone to take on their originally defined albedo,
-$\alpha_k$ (See Table \ref{tab:zoneparams}). Temperatures below $250^{\circ}K$
-replace these with a constant ice albedo, while the interval between describes a
-quadratic growth from $\alpha_k$ to $\alpha_i$ as temperature declines.
-
-By coupling these processes, and ranging through a series of initial temperature
-conditions in each zone, we are able to find a numerical snowball Earth in
-Figure \ref{fig:fireandice}. Similarly to our observations of Figure
-\ref{fig:stocherupt}, eruptions that happen close in time have a compounded
-effect of driving temperatures down further. After several eruptions between
-$1.75e9-2.1e9$ seconds, this effect causes temperatures to drop below the lower
-threshold of our albedo parameterization, $T_i$ and plummet to a new state
-between approximately $225-245^{\circ}K$. This phenomenon will be expanded on
-in Section \ref{sec:snowballearth}.
+The stable eruption frequency model oscillates around the warm Earth equilibrium
+shown in section \ref{sec:ice_albedo_results}. The unstable eruption frequency
+oscillates around the warm Earth equilibrium for approximately
+$70$ years before it quickly drops to oscillate around the snowball
+Earth equilibrium.
 
 \section{Discussion}
 Here we will discuss the possible processes behind the numerical behavior of our
