@@ -142,7 +142,7 @@ zones relative to the others (solid colour lines in Figure
 \ref{fig:steadystate}). The second is that the highest temperature zones at
 equilibrium are 3 and 4, and the lowest temperature zones at equilibrium are 6
 and 1. All zones approach an equilibrium temperature between $274.1^{\circ}$K
-and $282.3^{\circ}$K after a model year. (Table \ref{tab:teq}). By reducing the
+and $282.3^{\circ}$K after a model year (Table \ref{tab:teq}). By reducing the
 inter-zonal transfer coefficient between zones 4 and 5
 (dashed lines in Figure \ref{fig:steadystate}), we can alter the characteristics
 of a few zones dramatically. The most obvious of which are zones 4, 5, and,
@@ -161,6 +161,19 @@ travel time before the effect is felt in adjacent zones. $\phi(t)$ follows a
 $\frac{1}{t^2}$ fit to eruption data from \cite{robock} such that
 $\lim_{t\to\infty}\phi(t) = 1$.
 Figure \ref{fig:oneerupt} shows our solution post eruption. 
+
+Figure \ref{fig:oneerupt} shows the effect of a single eruption on zonal 
+temperatures initially at steady-state. The eruption occurs in zone 4 a year into
+modelling, as indicated by the colouring of the vertical dashed line, and is 
+immediately affected by the solar occlusion. Here, the most important feature is 
+the time lag between zones. The subsequently affected zones are 5 and 3, followed 
+by 6 and 2, and finally, zone 1. In addition, the initial magnitudes of occlusion 
+at each of these zones decreases the further they are, spatially, from the 
+initial eruption zone following \ref{fig:occlusion_space}
+(i.e $\phi_{4,init} > \phi_{3,5,init} > \phi_{2,6,init} > \phi_{1,init}$).
+Finally, recovery by each zone to equilibrium temperatures occurs approximately 
+a decade after eruption, to the same relative temperature range as initial, 
+steady-state conditions.
 
 \begin{figure}[H]
     \centering
@@ -223,7 +236,8 @@ Figure \ref{fig:oneerupt} shows our solution post eruption.
 \FloatBarrier
 
 \subsection{Snowball Earth: Stochastic Volcanism and Temperature-Dependent
-Albedo} As a possible scenario for global glaciation, we couple a Poisson
+Albedo} 
+As a possible scenario for global glaciation, we couple a Poisson
 distribution of eruptions, both temporally and spatially, with a
 temperature-dependent parameterization of albedo. This coupling is shown in
 Figure \ref{fig:fireandice}, and will be discussed after looking at the
