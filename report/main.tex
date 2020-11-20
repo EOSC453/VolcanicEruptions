@@ -37,34 +37,69 @@
 
 % Introduction and Overview
 \section{Introduction}
-Anthropogenic global warming is an identifier of climate change and has
-manifested as a defining issue of our time; intensifying the frequency and
-severity of extreme weather events, producing sea-level rise with the potential
-to displace millions, causing the loss of large freshwater reservoirs, reducing
-biodiversity in key biomes, among other effects. Though the question of why, and
-how, climate change operates, and what we can do to mitigate its effect on the
-Earth of our lifetime, is an arduously nonlinear problem that climate scientists
-have battled with for decades, both in the laboratory and in politics. One of
-the questions within this contention is how large local out-gassing events of
-volatile aerosols during volcanic eruptions, like carbon dioxide and sulfur
-dioxide, have historically affected the Earth, from the last ice-age to the
-explosive evolution following it. Here we have developed a simple radiative
-energy balance model for the Earth in order to investigate the effects of
-volcanism on this energy balance's behaviour. This model is inspired by the
-work of Russian climatologist Mikhail I. Budyko of the Lenningrad Geophysics
-Observatory, who discovered the ice-albedo feedback mechanism underlying climate
-change through his pioneering of studies on global climate using physical models
-of equilibrium (\cite{budyko_albedo}).
+Anthropogenic global warming is an identifier of climate change and a defining 
+issue of our time. It is thought to be the main trigger of intensified, more frequent
+extreme weather events, sea-level rise with the potential
+to displace millions, and loss of large freshwater reservoirs.
+The question of why, and how, climate change operates, and what we can do to mitigate 
+its effects during our lifetime, is an arduously nonlinear problem that climate scientists
+still battle with, both in the laboratory and in politics. Within this contention, we focus on
+how large local out-gassing events of volatils such as sulfur dioxide during volcanic eruptions
+have historically affected the Earth's climate. Here we chose to investigate
+the impact of volcanic perturbations on a simple radiative
+energy balance model. Throughout this paper we will only consider the effect of aerosols,
+and more specifically, SO2. This model is inspired by the
+work of Russian climatologist Mikhail I. Budyko, who discovered the ice-albedo
+feedback mechanism underlying climate change through his pioneering of studies
+on global climate using physical models of equilibrium (eq of what???) (\cite{budyko_albedo}).
+We proceed as follows:
 
-In this report, we will investigate perturbations to our climate model via
-volcanic forcing. This will take three forms. We will begin with a presently
-undisturbed model that approaches steady-state. Then we analyze the effects of
-an added perturbation of volcanic aerosols derived from data collected from the
-1982 El Chichón and Pinatubo eruptions published in \cite{robock}. Finally, we
-will implement a parameterization of temperature-dependent albedo in conjunction
-with a Poisson distribution of volcanic eruptions, temporally and spatially, to
-simulate a snowball Earth scenario.
-WE SHOULD ADD A BIT ABOUT OUR GENERAL ASSUMPTIONS HERE
+\begin{enumerate}
+    \item Build a graphical algorithm solving the radiative energy balance equations in a zonally-averaged Earth model,
+    based on figure 1
+    \item Compute the present, steady-state energy balance of the Earth to investigate the effect of
+    intra-zonal transfer by:
+        \item setting all transfer coefficients kij to zero
+        \item using the provided values of kij and comparing heat transfer magnitude and rates from our previous step
+    \item from \cite(Robock 2000) from the 1982 El Chichón and Pinatubo eruption introduce a $\phi(t)$ function representing the spatially
+    and temporally reducing effects of aerosol outgassing on the incoming radiation
+    \item Consider a nonlinear effect of temperature on albedo.
+    \item Using this new albedo parameterization as a proxy for the "ice-albedo" feedback, we look for solutions favourable to Snowball Earth
+conditions.
+    \item We then implement a Poisson sampling of eruptions to investigate a volcanic solution to Snowball Earth  
+\end{enumerate}
+
+% Anthropogenic global warming is an identifier of climate change and a defining 
+% issue of our time. It is thought to be the main trigger of intensified, more frequent
+% extreme weather events, sea-level rise with the potential
+% to displace millions, and loss of large freshwater reservoirs.
+% The question of why, and how, climate change operates, and what we can do to mitigate 
+% its effects on the Earth during our lifetime, is an arduously nonlinear problem that climate scientists
+% still battle with, both in the laboratory and in politics. Within this contention, we focus on
+% how large local out-gassing events of volatils such as sulfur dioxide during volcanic eruptions
+% have historically affected the Earth's climate. Here we chose to investigate
+% the impact of volcanic perturbations on a simple radiative
+% energy balance model. Throughout this paper we will only consider the effect of aerosols,
+% and more specifically, SO2. This model is inspired by the
+% work of Russian climatologist Mikhail I. Budyko, who discovered the ice-albedo
+% feedback mechanism underlying climate change through his pioneering of studies
+% on global climate using physical models of equilibrium (eq of what???) (\cite{budyko_albedo}).
+% We proceed as follows:
+
+% \begin{enumerate}
+%     \item Build a graphical algorithm solving the radiative energy balance equations in a zonally-averaged Earth model,
+% based on figure 1
+%     \item Compute the present, steady-state energy balance of the Earth to investigate the effect of
+% intra-zonal transfer by:
+%         \item setting all transfer coefficients kij to zero
+%         \item using the provided values of kij and comparing heat transfer magnitude and rates from our previous step
+%     \item from \cite(Robock 2000) from the 1982 El Chichón and Pinatubo eruption introduce a \phi(t) function representing the spatially
+%     and temporally reducing effects of aerosol outgassing on the incoming radiation
+%     \item Consider a nonlinear effect of temperature on albedo.
+%     \item Using this new albedo parameterization as a proxy for the "ice-albedo" feedback, we look for solutions favourable to Snowball Earth
+% conditions.
+%     \item We then implement a Poisson sampling of eruptions to investigate a volcanic solution to Snowball Earth  
+% \end{enumerate}
 
 \subsection{Budyko Climate Model}
 The evolution of Earth's temperature will be investigated using a Budyko
@@ -258,10 +293,33 @@ context of the data itself.
 
 \subsection{Steady-State Climate Model: No Volcanism}
 By passing initial condition temperatures calculated through our model with
-suppressed inter-zonal transfer (See Table \ref{tab:supressedteq}) to our
+suppressed inter-zonal transfer (See Table \ref{tab:teq}) to our
 steady-state model where inter-zonal transfer is allowed, we solve for the
 equilibrium temperatures by integrating forward in time
 (Figure \ref{fig:steadystate}).
+
+\begin{table}
+    \centering
+    \begin{tabular}{ c | c | c }
+        \hline
+        \thead{Zone} &
+        \thead{Interzonal Transfer Supressed \\ Equilibrium Temperature [K]} &
+        \thead{Interzonal Transfer Allowed \\ Equilibrium Temperature [K]} \\
+        \hline
+        1 & 217.23 & 274.12 \\
+        2 & 279.74 & 279.34 \\
+        3 & 296.45 & 282.26 \\
+        4 & 294.56 & 280.88 \\
+        5 & 263.56 & 279.71 \\
+        6 & 225.33 & 274.93 \\
+        \hline
+    \end{tabular}
+    \caption{
+        Equilibrium Temperature distributions for a climate model with no
+        volcanism
+    }
+    \label{tab:teq}
+\end{table}
 
 \begin{figure}[H]
     \centering
@@ -402,15 +460,15 @@ A model started with an initial temperature distribution at the unstable equilib
 
 A model started with an initial temperature distribution perturbed slightly above
 the unstable equilibrium (dashed lines in figure \ref{fig:albedo_equil}) asymptotically
-approaches the ``warm Earth'' equilibrium shown in table \ref{tab:eqstates}. \\
+approaches the ``warm Earth'' equilibrium given in table \ref{tab:eqstates}. \\
 
 A model started with an initial temperature distribution perturbed slightly below
 the unstable equilibrium (dotted lines in figure \ref{fig:albedo_equil}) asymptotically
-approaches the ``snowball Earth'' equilibrium shown in table \ref{tab:eqstates}.
+approaches the ``snowball Earth'' equilibrium given in table \ref{tab:eqstates}.
 The temperature difference between high-latitudinal and mid-latitudinal zones is much
 smaller for the snowball Earth equilibrium compared to the warm Earth equilibrium.
 
-\subsection{Fire and Ice: Stochastic Volcanism and the Ice-Albedo Feedback} 
+\subsection{Fire and Ice: Stochastic Volcanism and the Ice-Albedo Feedback}
 Figure \ref{fig:fireandice} shows the results of two models that combine
 volcanism defined in section \ref{sec:Volcanos} with the ice-albedo feedback
 defined in section \ref{sec:Ice}. The temperature ranges for the nonlinear albedo model
@@ -505,12 +563,54 @@ separation, approaches to equilibrium are not noticeably affected. This is
 evident in zones 2 and 1, and suggests they have little dependence on
 temperature characteristics within the northern zones. 
 
-\subsection{Climate Model Following Single Volcanic Eruption}
+\subsection{Volcanic Eruptions}
+One of the aims of our study was to investigate the short-term impact of
+volcanism on Earth's climate. The occlusion factor introduced in section
+\ref{sec:Occlusion} ultimately acts to cool the climate by blocking direct
+solar radiation from reaching the Earth's surface.\\
+
+An interesting result is the difference in time scales for the occluding effect
+of an eruption and the subsequent recovery time of the climate. Figure
+\ref{fig:occlusion} shows that suspended aerosols block less than 5\% of
+direct solar radiation 2 years after an eruption. On the other hand, figure
+\ref{fig:oneerupt} shows that it takes over a decade before the climate recovers
+to within 5\% of its equilibrium temperature. This demonstrates that the climate
+feels the effects of volcanic aerosol occlusion even after the aerosols have
+dissipated and no longer block solar radiation. \\
+
+The longer recovery time increases the susceptivity of the climate to compounding
+temperature drops from multiple eruptions, as see in figure \ref{fig:stocherupt}.
+Temperatures are forced to values over 10 degrees below their equilibrium values
+during intense volcanic episodes. As we will see, these high intensity volcanic
+episodes can be a trigger that drives to Earth away from its initial equilibrium
+into a snowball Earth state.
+
 \subsection{The Ice-Albedo Effect}
-\subsection{Snowball Earth: Stochastic Volcanism and Temperature-Dependent Albedo}
+The nonlinear albedo dependence on temperature defined in equation
+\ref{eqn:albedoparam} ultimately gives rise to three equilibrium
+conditions, as illustrated in figure \ref{fig:albedo_equil}. The ``warm Earth''
+equilibrium represents conditions where the ice-albedo feedback has a small
+effect on the Earth's global energy balance. A small decrease in temperature
+near this equilibrium is compensated by an increase in heat flow from adjacent
+zones as well as a net positive flux of radiative energy from the sun which acts to
+increase the temperature. Even when
+temperatures fall in the variable albedo temperature range
+(i.e. $250 \text{K} < T < 280 \text{K}$), no ice-albedo runaway is observed.
+There is a slight decrease in equilibrium temperatures
+for the warm Earth equilibrium when compared to the equilibrium for the model with
+no ice-albedo feedback (\ref{tab:teq} and \ref{tab:eqstates}) due to some of
+the equilibrium temperatures falling in the variable albedo range.
+
+
+\subsection{Fire and Ice: Stochastic Volcanism and the Ice-Albedo Feedback}
 \label{sec:snowballearth}
 
 \section{Conclusion}
+We saw that:
+In that case, under what conditions could Earth recover form the snowball solution?
+This model only investigates the effects of SO2 on the energy balance, not considering
+the influence of CO2. CO2 is a greenhouse gas, meaning that it efficiently absorbs the
+incoming solar radiation Volcanic eruptions 
 \subsection{Future Work}
 
 \section{Ancillary Information}
@@ -579,45 +679,6 @@ temperature characteristics within the northern zones.
 % \label{listing:examplecode}
 % \end{listing}
 \subsection{Data}
-
-\subsubsection{Equilibrium Temperatures: Steady State Model}
-\begin{table}[H]
-    \parbox{.45\linewidth}{
-    \captionsetup{singlelinecheck = false, justification=justified}
-    \caption{Inter-zonal heat transfer suppressed}
-    \begin{tabular}{ll}
-    \hline
-    Zone & Equilibrium Temperature [$^{\circ}$K] \\
-    \hline
-    1 & 217.23 \\
-    2 & 279.74 \\
-    3 & 296.45 \\
-    4 & 294.56 \\ 
-    5 & 263.56 \\
-    6 & 225.33 \\
-    \end{tabular}
-    \label{tab:supressedteq}
-    }
-\hfill
-    \parbox{.45\linewidth}{
-    \captionsetup{singlelinecheck = false, justification=justified}
-    \caption{Inter-zonal heat transfer allowed}
-    \begin{tabular}{ll}
-    \hline
-    Zone & Equilibrium Temperature [$^{\circ}$K] \\
-    \hline
-    1 & 274.12 \\
-    2 & 279.34 \\
-    3 & 282.26 \\
-    4 & 280.88 \\ 
-    5 & 279.71 \\
-    6 & 274.93 \\
-    \end{tabular}
-    \label{tab:teq}
-    }
-\end{table}
-\FloatBarrier
-
 \subsubsection{Eruption Times Series}
 \begin{table}[H]
     \parbox{.45\linewidth}{
