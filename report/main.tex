@@ -131,10 +131,11 @@ transforms equation \ref{eqn:budyko} to
 \} +
 \frac{L_{ki}k_{ki}}{{A_k}\mean{\rho_kc_k[Z_k]}}(T_{k}-T_{i})
 \end{equation}
-A value of $\phi(t) = 1$ represents no volcanic aerosol occlusion while a value
+A value of $\phi(t) = 1$ represents no volcanic aerosol occlusion. A value
 of $\phi(t) = 0.7$, for example, represents a $30\%$ reduction in total
-incoming solar radiation. \\
+incoming solar radiation.
 
+\subsubsection{Direct Radiation Occlusion}
 Based on observations of the reduction of solar radiation after the
 1982 El Chichón eruption and the 1991 Pinatubo eruption \parencite{robock},
 an empirical curve that best fit the data was used for $\phi(t)$, as shown
@@ -143,7 +144,6 @@ $\phi(t) = 1 - ct^{-2}$ where $c$ is a constant found through nonlinear
 regression gave a reasonable representation of the data with the property
 that $\phi(t) \to 1$ as $t \to \infty$.
 
-\subsubsection{Direct Radiation Occlusion}
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.6]{occlusion.pdf}
@@ -170,6 +170,17 @@ that $\phi(t) \to 1$ as $t \to \infty$.
 \subsubsection{Stochastic Eruption Frequency}
 
 \subsection{Ice-Albedo Feedback}
+
+\begin{equation} \label{eqn:albedoparam}
+    \alpha_k(T_k) =
+      \begin{cases}
+      \alpha_k & T_k \geq T_0 \\
+      \alpha_k + (\alpha_i-\alpha_k)\frac{(T_k-T_0)^2}{(T_i-T_0)^2}
+      & T_i < T_k < T_0 \\
+      \alpha_i & T_k \leq T_i
+      \end{cases}
+      \quad T_i = 250^{\circ}K \quad T_0 = 280^{\circ}K
+\end{equation}
 
 \begin{figure}[H]
     \centering
@@ -225,29 +236,20 @@ initial rate of change in temperature and will be analyzed further in Section
 \ref{section:steadystate}.
 
 \subsection{Climate Model Following Single Volcanic Eruption}
-To introduce the effect of volcanism to our model, we add an occlusion factor,
-$\phi(t)$, to each zone that reduces total incoming solar radiation
-(Figure \ref{fig:occlusion}). $\phi_k(t)$ varies in initial magnitude and onset
-time based on proximity to the zone in which the eruption occurs. Alternatively,
-an eruption in zone 3 will have a reduced effect in zone 4 and 2 to simulate
-the thinning of aerosol density as the cloud spreads, and the aerosols have a
-travel time before the effect is felt in adjacent zones. $\phi(t)$ follows a
-$\frac{1}{t^2}$ fit to eruption data from \cite{robock} such that
-$\lim_{t\to\infty}\phi(t) = 1$.
-Figure \ref{fig:oneerupt} shows our solution post eruption. 
 
 Figure \ref{fig:oneerupt} shows the effect of a single eruption on zonal 
-temperatures initially at steady-state. The eruption occurs in zone 4 a year into
-modelling, as indicated by the colour and position of the vertical dashed line. 
-Here, the most important feature is the time lag between zones. Zone 4 is immediately 
-affected by the solar occlusion. The subsequently affected zones are 5 and 3, followed 
-by 6 and 2, and finally, zone 1. In addition, the initial magnitudes of occlusion 
-at each of these zones decreases the further they are, spatially, from the 
-initial eruption zone following Figure \ref{fig:occlusion_space}
-(i.e $\phi_{4,init} > \phi_{3,5,init} > \phi_{2,6,init} > \phi_{1,init}$).
-Finally, recovery by each zone to equilibrium temperatures occurs approximately 
-a decade after eruption, to the same relative temperature range as initial, 
-steady-state conditions.
+temperatures initially at steady-state. The eruption occurs in zone 4 after 1 year,
+as indicated by the vertical dashed line. 
+A time lag between the zonal temperature responses is clearly visible.
+Zone 4 is immediately  affected by the solar occlusion.
+Zones 5 and 3 are subsequently affected, followed by zones
+6 and 2, Finally, zone 1 is the last to show a temperature response from the
+eruption in zone 4.\\
+
+Additionally, the magnitude of the temperature drop of each of zone decreases
+the further the zone is from the initial eruption zone. Finally, the recovery of
+each zone to its equilibrium temperature occurs over one decade after the eruption.
+The equilibrium temperature values are the same post-eruption as they are pre-eruption.
 
 \begin{figure}[H]
     \centering
@@ -267,7 +269,7 @@ unstable. If we begin the model at the unstable equilibrium temperatures defined
 in Table \ref{tab:eqstates}, a small positive temperature perturbation causes zonal
 temperatures to increase asymptotically to the upper equilibrium (dashed lines). 
 Conversely, a small negative perturbation causes zonal temperatures to approach the lower 
-equilibrium aspymptotically (dotted lines). These scenarios are represented by the 
+equilibrium asymptotically (dotted lines). These scenarios are represented by the 
 warm Earth and snowball Earth sections, respectively. Note that the warm Earth 
 equilibrium has zonal temperatures that are similar to the steady-state described in
 Figure \ref{fig:steadystate}, though zones below the upper threshold temperature 
@@ -275,7 +277,7 @@ have temperatures that are slightly perturbed from our original model. In the
 lower equilibrium case, the temperature difference between high-latitudinal and 
 mid-latitudinal zones is much smaller.
 
-\begin{center}
+\begin{table}
     \begin{tabular}{ c | c | c | c }
       \hline
       \thead{Zone} & 
@@ -289,10 +291,11 @@ mid-latitudinal zones is much smaller.
       4 & 280.83 & 257.78 & 236.13 \\ 
       5 & 279.66 & 256.98 & 235.70 \\
       6 & 274.83 & 253.11 & 233.20 \\
-    \hline
-    \label{tab:eqstates}
+        \hline
     \end{tabular}
-  \end{center}
+    \caption{Ice-albedo effect equilibrium temperature distributions}
+    \label{tab:eqstates}
+\end{table}
 
 
 \begin{figure}[H]
@@ -488,35 +491,6 @@ temperature characteristics within the northern zones.
 % \label{listing:examplecode}
 % \end{listing}
 \subsection{Data}
-\subsubsection{Model Equations}
-\label{sec:eqns}
-\begin{equation} \label{eqn:dtk}
-  \frac{dT_k}{dt} = \frac{1}{\mean{\rho_kc_k[Z_k]}}
-  \{
-    \gamma_k(1-\alpha_k^{sky})(1-\Bar{\alpha_k})S_0-\tau\sigma_BT_k^{4}
-  \} +
-  \frac{L_{ki}k_{ki}}{{A_k}\mean{\rho_kc_k[Z_k]}}(T_{k}-T_{i}) \quad k=1,\dots,6
-\end{equation}
-
-\begin{equation} \label{eqn:dtkphi}
-  \frac{dT_k}{dt} = \frac{1}{\mean{\rho_kc_k[Z_k]}}
-  \{
-    \gamma_k(1-\alpha_k^{sky})(1-\Bar{\alpha_k})\phi_k(t)S_0-\tau\sigma_BT_k^{4}
-  \} +
-  \frac{L_{ki}k_{ki}}{{A_k}\mean{\rho_kc_k[Z_k]}}(T_{k}-T_{i})
-  \quad i \neq k, i = k \pm 1
-\end{equation}
-
-\begin{equation} \label{eqn:albedoparam}
-  \alpha_k(T_k) =
-    \begin{cases}
-    \alpha_k & T_k \geq T_0 \\
-    \alpha_k + (\alpha_i-\alpha_k)\frac{(T_k-T_0)^2}{(T_i-T_0)^2}
-    & T_i < T_k < T_0 \\
-    \alpha_i & T_k \leq T_i
-    \end{cases}
-    \quad T_i = 250^{\circ}K \quad T_0 = 280^{\circ}K
-\end{equation}
 
 \subsubsection{Equilibrium Temperatures: Steady State Model}
 \begin{table}[H]
